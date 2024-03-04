@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $gambar_path = 'uploads/' . $gambar_name;
 
         if (move_uploaded_file($gambar_tmp, $gambar_path)) {
-            // Lakukan update profil dengan path gambar yang benar
             $update_query = "UPDATE user SET Email='{$_POST['email']}', NamaLengkap='{$_POST['nama_lengkap']}', Alamat='{$_POST['alamat']}', Img='$gambar_path' WHERE Username='$username'";
             if ($conn->query($update_query) === TRUE) {
                 echo "<script>alert('Profil berhasil diperbarui');</script>";
@@ -37,8 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         $gambar_path = '';
-        
-        // Lakukan update profil tanpa mengubah path gambar
         $update_query = "UPDATE user SET Email='{$_POST['email']}', NamaLengkap='{$_POST['nama_lengkap']}', Alamat='{$_POST['alamat']}' WHERE Username='$username'";
         if ($conn->query($update_query) === TRUE) {
             echo "<script>alert('Profil berhasil diperbarui');</script>";
@@ -77,8 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="container mt-5">
         <h2 class="mb-4">Profil Pengguna</h2>
+
         <div class="text-center mb-3">
-            <img src="uploads/<?php echo isset($row['Img']) ? $row['Img'] : 'placeholder.jpg'; ?>" alt="Foto" style="max-width: 150px;">
+            <img src="<?php echo isset($row['img']) ? $row['img'] : 'placeholder.jpg'; ?>" class="img-thumbnail" style="max-width: 100px;" alt="Foto Profil">
         </div>
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">

@@ -1,10 +1,28 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
+}
+
 include 'koneksi.php';
 
 $notif = '';
+$username = $_SESSION['username'];
+$query = "SELECT * FROM user WHERE Username='$username'";
+
+$result = $conn->query($query);
+
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+} else {
+    echo "User not found!";
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tambah'])) {
-    $userID = $_POST["userID"];
+    $userID = $row['UserID']; // Perbaikan di sini
     $bukuID = $_POST["bukuID"];
 
     $query_insert = "INSERT INTO koleksipribadi (UserID, BukuID) VALUES ('$userID', '$bukuID')";
@@ -17,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tambah'])) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
     $koleksiID = $_POST["koleksiID"];
-    $userID = $_POST["userID"];
+    $userID = $row['UserID']; // Perbaikan di sini
     $bukuID = $_POST["bukuID"];
 
     $query_update = "UPDATE koleksipribadi SET UserID='$userID', BukuID='$bukuID' WHERE KoleksiID='$koleksiID'";
@@ -44,6 +62,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 ?>
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,26 +74,14 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 <body>
     <div class="container">
         <h2 class="mt-4 mb-4">Koleksi Pribadi</h2>
-        <?php echo $notif; ?> <!-- Menampilkan notifikasi di sini -->
+        <?php echo $notif; ?>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <?php if (isset($id)) { ?>
                 <input type="hidden" name="koleksiID" value="<?php echo $id; ?>">
             <?php } ?>
             <div class="form-group">
-                <label for="userID">Username:</label>
-                <select class="form-control" id="userID" name="userID">
-                    <?php
-                    $sql_user = "SELECT UserID, Username FROM user";
-                    $result_user = $conn->query($sql_user);
-                    if ($result_user->num_rows > 0) {
-                        while ($row_user = $result_user->fetch_assoc()) {
-                            echo '<option value="' . $row_user["UserID"] . '"';
-                            if (isset($userID) && $row_user["UserID"] == $userID) echo ' selected';
-                            echo '>' . $row_user["Username"] . '</option>';
-                        }
-                    }
-                    ?>
-                </select>
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" value="<?php echo $username; ?>" readonly>
             </div>
             <div class="form-group">
                 <label for="bukuID">Judul Buku:</label>

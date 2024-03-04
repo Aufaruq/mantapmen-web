@@ -108,7 +108,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ulasan']) && isset($_P
                 echo "<p>Kategori: " . $row_kategori['NamaKategori'] . "</p>";
             }
 
-            echo '<h4 class="mt-5">Ulasan Pengguna:</h4>';
+            if (isset($_SESSION['username'])) {
+                echo '<form action="" method="post" class="mt-5" onsubmit="return validateForm()">
+                        <div class="form-group">
+                            <label for="ulasan">Ulasan:</label>
+                            <textarea class="form-control" id="ulasan" name="ulasan" rows="3"></textarea>
+                            <small class="text-danger" id="ulasanError" style="display:none;">Kolom ulasan harus diisi.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <select class="form-control" id="rating" name="rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="BukuID" value="' . $book_id . '">
+                        <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
+                    </form>';
+            }
+
+        } else {
+            echo "Buku tidak ditemukan.";
+        }
+
+        echo '<h4 class="mt-5">Ulasan Pengguna:</h4>';
             echo '<div class="table-responsive">';
             echo '<table class="table table-striped">';
             echo '<thead>';
@@ -136,38 +167,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ulasan']) && isset($_P
             echo '</tbody>';
             echo '</table>';
             echo '</div>';
-
-            if (isset($_SESSION['username'])) {
-                echo '<form action="" method="post" class="mt-5" onsubmit="return validateForm()">
-                        <div class="form-group">
-                            <label for="ulasan">Ulasan:</label>
-                            <textarea class="form-control" id="ulasan" name="ulasan" rows="3"></textarea>
-                            <small class="text-danger" id="ulasanError" style="display:none;">Kolom ulasan harus diisi.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="rating">Rating:</label>
-                            <select class="form-control" id="rating" name="rating">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="5">6</option>
-                                <option value="5">7</option>
-                                <option value="5">8</option>
-                                <option value="5">9</option>
-                                <option value="5">10</option>
-                            </select>
-                        </div>
-                        <input type="hidden" name="BukuID" value="' . $book_id . '">
-                        <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
-                    </form>';
-            }
-
-        } else {
-            echo "Buku tidak ditemukan.";
-        }
+            
         ?>
+
         <a href="dashboard.php" class="btn btn-secondary">Kembali ke dashboard</a>
     </div>
 

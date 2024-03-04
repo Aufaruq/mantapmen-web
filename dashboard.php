@@ -53,7 +53,7 @@ $result_buku = $conn->query($sql_buku);
                         <a class="nav-link" href="ulasan.php">Ulasan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="generate.php">generate</a>
+                        <a class="nav-link" href="laporan.php">generate</a>
                     </li>
                 <?php endif; ?>
                 <?php if ($role == 'peminjam'): ?>

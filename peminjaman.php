@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include 'koneksi.php';
 
 function tambahPeminjaman($userID, $bukuID, $tanggalPeminjaman, $tanggalPengembalian, $statusPeminjaman) {
@@ -76,7 +78,8 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 function getUserOptions() {
     global $conn;
     $options = '';
-    $query = "SELECT UserID, Username FROM user";
+    $username = $_SESSION['username']; // Mendapatkan username dari sesi
+    $query = "SELECT UserID, Username FROM user WHERE Username = '$username'"; // Menyesuaikan query untuk mendapatkan informasi user yang login
     $result = $conn->query($query);
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
